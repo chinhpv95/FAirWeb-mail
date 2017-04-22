@@ -77,16 +77,8 @@
         $uom = $obser['uom'];
         $station_label = $obser['station']['properties']['label'];
         $last_time_from_api_unix = substr($obser['lastValue']['timestamp'], 0, 10);
+        $last_time_from_api += 25200; //đổi múi giờ sang +7
         $last_time_from_api = gmdate("d-m-Y H:i",substr($obser['lastValue']['timestamp'], 0, 10));
-        
-        $last_time_hour_from_api = substr($last_time_from_api, 11, 2) + 7;
-        $last_time_min_from_api = substr($last_time_from_api, 14, 2);
-        $last_time_day_from_api = substr($last_time_from_api, 0, 2);
-        $last_time_month_from_api = substr($last_time_from_api, 3, 2);
-        $last_time_year_from_api = substr($last_time_from_api, 6, 4);
-
-        //đổi sang múi giờ +7
-        $last_time_from_api = $last_time_day_from_api.'-'.$last_time_month_from_api.'-'.$last_time_year_from_api.' '.$last_time_hour_from_api.':'.$last_time_min_from_api;
 
 
         $pm25_current_level = comparePm25($pm25);
