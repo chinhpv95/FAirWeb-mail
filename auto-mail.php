@@ -77,8 +77,8 @@
         $uom = $obser['uom'];
         $station_label = $obser['station']['properties']['label'];
         $last_time_from_api_unix = substr($obser['lastValue']['timestamp'], 0, 10);
-        $last_time_from_api += 25200; //đổi múi giờ sang +7
-        $last_time_from_api = gmdate("d-m-Y H:i",substr($obser['lastValue']['timestamp'], 0, 10));
+        $last_time_from_api_unix += 25200; //đổi múi giờ sang +7
+        $last_time_from_api_unix = gmdate("d-m-Y H:i",substr($obser['lastValue']['timestamp'], 0, 10));
 
 
         $pm25_current_level = comparePm25($pm25);
@@ -88,7 +88,7 @@
 
         if (($time_now - $last_time_from_api_unix < 3600) && ($pm25 != 0) && ($pm25_current_level >= $row['level'])) {
             $title = 'Chỉ số không khí trạm '.$station_label;
-            $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api.' là '.$pm25.'. '.compareCmt($pm25_current_level);
+            $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api_unix.' là '.$pm25.'. '.compareCmt($pm25_current_level);
             $nTo = 'Chinh';
             $mTo = $row['mail'];
             echo $mTo;

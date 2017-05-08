@@ -7,7 +7,7 @@
 		include "phpmail.php";
 
 
-		$conn = mysqli_connect('localhost', 'root', '', 'user');
+		$conn = mysqli_connect('http://118.70.72.15:5904/mail', 'root', '12345678', 'user');
 
 
 		$json = file_get_contents('http://118.70.72.15:8080/sos-bundle/api/v1/timeseries');
