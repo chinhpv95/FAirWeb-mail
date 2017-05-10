@@ -1,4 +1,6 @@
-
+<head>
+    <link rel="icon" href="img/ico.png">
+</head>
 	<?php
 	
 		//lib PHPMailer
@@ -6,8 +8,16 @@
 		include "phpmailer/class.phpmailer.php"; 
 		include "phpmail.php";
 
+        function vadilateMail($mail) {
+            if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+                return 0;
+            }
+            return 1;
+        }
 
-		$conn = mysqli_connect('http://118.70.72.15:5904/mail', 'root', '12345678', 'user');
+        $url = "http://localhost:8000/";
+
+		$conn = mysqli_connect('localhost', 'root', '', 'user');
 
 
 		$json = file_get_contents('http://118.70.72.15:8080/sos-bundle/api/v1/timeseries');
@@ -60,11 +70,15 @@
 
 
     	$temp_station = ' ';
+        if(isset($_POST['cancel'])){
+            header("Location: ". $url); /* Redirect browser */
+            exit();
+        }
     	if(isset($_POST['ok'])){
         	$mail=$_POST['mail'];
         	$lv=$_POST['level'];
         	$duration=$_POST['duration'];
-        	if ($lv != 0) {
+        	if (($lv != 0) && ($duration != 0) && (vadilateMail($mail) == 1)) {
         		//echo " hello $mail, you've selected station $station, PM2.5 level $lv<br>";
 
 
@@ -96,11 +110,8 @@
 				//send mail
 				$mail = sendMail($title, $content, $nTo, $mTo,$diachicc='');
 				
-	
-				if($mail == 1)
-					echo 'Ok';
-				else 
-					echo 'Fail';
+                include "respond/success.php";
+
 
 				/*for ($i=0; $i < $k; $i++) {
         			//echo $station_id[$i];
@@ -110,12 +121,11 @@
         				echo $temp_id;
         			}
         		}*/
-				//echo '<meta http-equiv="refresh" content="2; url=http://localhost:8008/">';
 
         	}
-        	else 
-        		echo "Fail";
-        		//echo '<meta http-equiv="refresh" content="2; url=http://localhost:8008/">';
+        	else {
+                include "respond/fail.php";
+            }
         }    	
     ?>
 

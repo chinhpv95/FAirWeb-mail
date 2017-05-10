@@ -38,25 +38,25 @@
 
     function compareCmt($level) {
         if ($level == 1) {
-            return "Chất lượng không khí trong lành, tốt cho sức khỏe";
+            return "Chất lượng không khí trong lành, tốt cho sức khỏe.";
         }
         else if ($level == 2) {
-            return "Chất lượng không khí bình thường, không xấu";
+            return "Chất lượng không khí bình thường, không xấu.";
         }
         else if ($level == 3) {
-            return "Chất lượng không khí chưa sạch, ở mức độ cảnh báo";
+            return "Chất lượng không khí chưa sạch, ở mức độ cảnh báo.";
         }
         else if ($level == 4) {
-            return "Chất lượng không khí ô nhiễm vừa phải, lời khuyên nên lọc không khí";
+            return "Chất lượng không khí ô nhiễm vừa phải, lời khuyên nên lọc không khí.";
         }
         else if ($level == 5) {
-            return "Chất lượng không khí ô nhiễm nhiều, cần thiết phải lọc không khí";
+            return "Chất lượng không khí ô nhiễm nhiều, cần thiết phải lọc không khí.";
         }
         else if ($level == 6) {
-            return "Chất lượng không khí ô nhiễm nghiêm trọng, nên có biện pháp bảo vệ đường hô hấp";
+            return "Chất lượng không khí ô nhiễm nghiêm trọng, nên có biện pháp bảo vệ đường hô hấp.";
         }
         else if ($level == 7) {
-            return "Chất lượng không khí ô nhiễm vô cùng nghiêm trọng, không thích hợp cho hít thở và sự sống";
+            return "Chất lượng không khí ô nhiễm vô cùng nghiêm trọng, không thích hợp cho hít thở và sự sống.";
         }
 
     }
@@ -70,6 +70,7 @@
 
     while ($row = mysqli_fetch_assoc($querry)) {
 
+        $title = $content = $nTo = $mTo = " ";
         //lấy dữ liệu từ api
         $obser = getData($row['id_station']);
         
@@ -88,14 +89,23 @@
 
         if (($time_now - $last_time_from_api_unix < 3600) && ($pm25 != 0) && ($pm25_current_level >= $row['level'])) {
             $title = 'Chỉ số không khí trạm '.$station_label;
-            $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api_unix.' là '.$pm25.'. '.compareCmt($pm25_current_level);
+            $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api_unix.' là '.$pm25.' μg/m3. '.compareCmt($pm25_current_level);
             $nTo = 'Chinh';
             $mTo = $row['mail'];
             echo $mTo;
 
+        }
+        $title = 'Chỉ số không khí trạm '.$station_label;
+        $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api_unix.' là '.$pm25.' μg/m3. '.compareCmt($pm25_current_level);
+        $nTo = 'Chinh';
+        $mTo = $row['mail'];
+        echo $mTo;
 
-            $mail = sendMail($title, $content, $nTo, $mTo,$diachicc='');
-
+        $mail = sendMail($title, $content, $nTo, $mTo,$diachicc='');
+        if($mail==1) {
+            echo "OK <br>";
+        } else {
+            echo "Fail <br>";
         }
 
         //trừ số lần cảnh báo trong db
