@@ -78,28 +78,37 @@
         $uom = $obser['uom'];
         $station_label = $obser['station']['properties']['label'];
         $last_time_from_api_unix = substr($obser['lastValue']['timestamp'], 0, 10);
-        $last_time_from_api_unix += 25200; //đổi múi giờ sang +7
-        $last_time_from_api_unix = gmdate("d-m-Y H:i",substr($obser['lastValue']['timestamp'], 0, 10));
-
 
         $pm25_current_level = comparePm25($pm25);
 
         //lấy thời gian hiện tại ở dạng UNIX time
         $time_now=time();
+        
+        //đổi sang múi giờ +7
+        $time_now += 25200;
+        $last_time_from_api_unix += 25200;
+
+        echo "Last value: ".gmdate("d-m-Y H:i",$last_time_from_api_unix);
+        echo "<br>";
+        echo "Time now: ".gmdate("d-m-Y H:i",$time_now);
+        echo "<br>";
+
 
         if (($time_now - $last_time_from_api_unix < 3600) && ($pm25 != 0) && ($pm25_current_level >= $row['level'])) {
+            //$last_time_from_api_unix += 25200; //đổi múi giờ sang +7
+            $last_time_from_api_unix = gmdate("d-m-Y H:i",substr($obser['lastValue']['timestamp'], 0, 10));
             $title = 'Chỉ số không khí trạm '.$station_label;
             $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api_unix.' là '.$pm25.' μg/m3. '.compareCmt($pm25_current_level);
             $nTo = 'Chinh';
             $mTo = $row['mail'];
-            echo $mTo;
+            echo $mTo." ";
 
         }
-        $title = 'Chỉ số không khí trạm '.$station_label;
+        /*$title = 'Chỉ số không khí trạm '.$station_label;
         $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api_unix.' là '.$pm25.' μg/m3. '.compareCmt($pm25_current_level);
         $nTo = 'Chinh';
         $mTo = $row['mail'];
-        echo $mTo;
+        echo $mTo;*/
 
         $mail = sendMail($title, $content, $nTo, $mTo,$diachicc='');
         if($mail==1) {
