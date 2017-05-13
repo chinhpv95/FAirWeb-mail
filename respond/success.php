@@ -13,7 +13,7 @@
 <form action="sendmail.php" method="post">
 	<center>
 		<div class="respond">
-			<p>You've subcribed successful. A confirmation email will be sent in a while.</p>
+			<p>You've subcribed successful. A confirmation email will be sent.</p>
 			<p>Back to homepage in 3 seconds</p>
 			<script type="text/javascript">
 	            function Redirect() {

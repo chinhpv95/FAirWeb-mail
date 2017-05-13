@@ -96,9 +96,16 @@
 
         if (($time_now - $last_time_from_api_unix < 3600) && ($pm25 != 0) && ($pm25_current_level >= $row['level'])) {
             //$last_time_from_api_unix += 25200; //đổi múi giờ sang +7
+           
+
+            /*$last_time_from_api_unix = $last_time_from_api_unix + 25200;
+            echo $last_time_from_api_unix."<br>";*/
             $last_time_from_api_unix = gmdate("d-m-Y H:i",substr($obser['lastValue']['timestamp'], 0, 10));
+            /*echo $last_time_from_api_unix;
+            $last_time_from_api_unix = gmdate("d-m-Y H:i",substr($obser['lastValue']['timestamp'], 0, 10));*/
+             echo $last_time_from_api_unix."<br>";
             $title = 'Chỉ số không khí trạm '.$station_label;
-            $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' lúc '.$last_time_from_api_unix.' là '.$pm25.' μg/m3. '.compareCmt($pm25_current_level);
+            $content = 'Chỉ số PM2.5 ở trạm '.$station_label.' đang là '.$pm25.' μg/m3. '.compareCmt($pm25_current_level);
             $nTo = 'Chinh';
             $mTo = $row['mail'];
             echo $mTo." ";
